@@ -327,7 +327,7 @@ class SlidableController {
 
   /// Dismisses the [Slidable].
   Future<void> dismiss(
-    ResizeRequest request, {
+    ResizeRequest? request, {
     Duration duration = _defaultMovementDuration,
     Curve curve = _defaultCurve,
   }) async {

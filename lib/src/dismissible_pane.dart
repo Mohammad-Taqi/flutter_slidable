@@ -28,6 +28,7 @@ class DismissiblePane extends StatefulWidget {
   const DismissiblePane({
     Key? key,
     required this.onDismissed,
+    this.fullSwipe,
     this.dismissThreshold = _kDismissThreshold,
     this.dismissalDuration = _kDismissalDuration,
     this.resizeDuration = _kResizeDuration,
@@ -69,7 +70,8 @@ class DismissiblePane extends StatefulWidget {
 
   /// Called when the widget has been dismissed, after finishing resizing.
   final VoidCallback onDismissed;
-
+  /// Called when the widget has been swiped full.
+  final VoidCallback? fullSwipe;
   /// Whether closing the [Slidable] if the app cancels the dismiss.
   final bool closeOnCancel;
 
@@ -132,9 +134,15 @@ class _DismissiblePaneState extends State<DismissiblePane> {
       }
       if (canDismiss) {
         controller!.dismiss(
-          ResizeRequest(widget.resizeDuration, widget.onDismissed),
+          /*    ResizeRequest(widget.resizeDuration, widget.onDismissed)*/
+          null,
           duration: widget.dismissalDuration,
         );
+        widget.fullSwipe?.call();
+
+        Future.delayed(const Duration(milliseconds: 500), () {
+          controller!.close();
+        });
       } else if (widget.closeOnCancel) {
         controller!.close();
       }
